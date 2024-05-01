@@ -19,7 +19,7 @@ export default class UsersController {
       const user = new User()
 
       await user
-        .fill({ username: payload.username, email: payload.email, password: payload.password })
+        .fill({ full_name: payload.full_name, email: payload.email, password: payload.password })
         .save()
 
       return response.created({ message: 'Success!' })
@@ -54,15 +54,8 @@ export default class UsersController {
   }
   }
     
-  async findUserById({ response, params, auth }: HttpContext) {
-   await auth.authenticateUsing(['api'])
+  async findUserById({ response, auth }: HttpContext) {
 
-    const findUser = await User.findBy('id', params.id)
-    
-    if (!findUser) {
-      return response.notFound();
-    }
-
-        return response.json({data: findUser});
+        return response.json({data: auth.user});
     }
 }
